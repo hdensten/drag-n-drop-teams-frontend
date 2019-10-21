@@ -1,0 +1,54 @@
+body {
+  margin: 0;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+
+  .left-student-list {
+    height: 100%;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  // .separator-skew {
+  //   height: 100vh;
+  //   border-right: 1px solid black;
+  //   transform: skew(10deg);
+  // }
+
+  .teams-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 60px;
+    padding: 50px;
+    justify-content: space-around;
+
+    .team-list {
+      border: 1px solid black;
+      height: minmax(250px);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+
+      .team-title {
+        height: 25%;
+        width: 100%;
+        padding: 20px 0;
+        margin-bottom: 50px;
+        text-align: center;
+        background-color: #00cb78;
+        transform: skewY(10deg);
+      }
+    }
+  }
+
+  .student-draggable {
+    border: 1px solid black;
+    margin: 10px;
+    background-color: white;
+  }
+}
