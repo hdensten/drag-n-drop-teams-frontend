@@ -1,61 +1,130 @@
 body {
-  margin: 0;
+  margin: 0px;
+  background-color: #ffffff;
+}
+
+.title-bar {
+  text-align: center;
+  background-color: #01cb78;
+  padding: 10px;
+  box-shadow: 0px 7px 7px 2px rgba(0, 0, 0, 0.54),
+    inset 0px 0px 25px -2px hsla(0, 0, 0, 0.49);
+
+  h1 {
+    margin: 0px;
+  }
 }
 
 .app {
-  display: grid;
-  grid-template-columns: 1fr 4fr;
+  display: flex;
 
   .left-student-list {
+    position: absolute;
     height: 100%;
-    padding: 30px;
+    width: 200px;
+    margin-top: 10px;
+    padding: 40px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-  }
 
-  // .separator-skew {
-  //   height: 100vh;
-  //   border-right: 1px solid black;
-  //   transform: skew(10deg);
-  // }
+    input {
+      width: 192px;
+      height: 30px;
+      font-size: 1em;
+      box-shadow: 3px 3px 6px 0px rgba(0, 0, 0, 0.54);
+      margin-bottom: 20px;
+    }
 
-  .teams-wrapper {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 60px;
-    padding: 50px;
-    justify-content: space-around;
-
-    .team-list {
-      border: 1px solid black;
-      // height: minmax(250px);
-      width: 250px;
+    .buttons {
       display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
+      justify-content: space-between;
+      width: 200px;
+      margin-bottom: 20px;
+    }
 
-      .team-title {
-        height: 50px;
-        width: 100%;
-        padding-top: 20px;
-        margin-bottom: 60px;
+    button {
+      cursor: pointer;
+      text-decoration: none;
+      align-items: center;
+      transition: 0.3s ease-in-out;
+      width: 90px;
+      height: 30px;
+
+      &:hover {
+        box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.54);
+        border: 1px solid black;
+        border-radius: 3px;
+      }
+    }
+
+    .unsorted-students {
+      border: 2px solid #454545;
+      background-color: #e3e3e3;
+      border-radius: 5px;
+      box-shadow: 4px 4px 6px 0px rgba(0, 0, 0, 0.44);
+
+      .unsorted-header-text {
         text-align: center;
-        font-size: 1.9em;
         font-weight: 800;
+        font-size: 1.2em;
+        margin-bottom: 20px;
+        padding: 10px 0px;
         background-color: #00cb78;
-        transform: translate(0px, 30px) skew(0deg, 8deg);
+        box-shadow: 0px 5px 4px 0px rgba(0, 0, 0, 0.54),
+          inset 0px 0px 13px -2px hsla(0, 0, 0, 0.49);
       }
     }
   }
+}
 
-  .student-draggable {
-    border: 1px solid black;
-    // padding-left: 10px;
-    text-align: center;
-    margin: 10px;
-    background-color: white;
+// .separator-skew {
+//   height: 50vh;
+//   border-right: 1px solid black;
+//   transform: skew(10deg);
+// }
+
+.teams-wrapper {
+  display: flex;
+  margin-left: 275px;
+  justify-content: flex-start;
+  width: 100%;
+  flex-wrap: wrap;
+  margin-top: 30px;
+
+  .team-list {
+    border: 2px solid #454545;
+    background-color: #e3e3e3;
+    border-radius: 5px;
+    width: 250px;
+    margin: 20px;
+    box-shadow: 6px 7px 14px 2px rgba(0, 0, 0, 0.54);
+
+    .team-title {
+      height: 50px;
+      width: 80%;
+      padding-top: 20px;
+      margin-bottom: 60px;
+      text-align: center;
+      border-radius: 5px;
+      font-size: 1.9em;
+      font-weight: 800;
+      background-color: #00cb78;
+      transform: translate(10%, 25px) skew(0deg, 8deg);
+      box-shadow: 7px 7px 7px 2px rgba(0, 0, 0, 0.54),
+        inset 25px 29px 33px -25px rgba(255, 255, 255, 1.54);
+    }
   }
 }
 
-// hi hannah
+.student-draggable {
+  border: 1px solid black;
+  font-size: 1.2em;
+  text-decoration: none;
+  text-align: center;
+  border-radius: 5px;
+  margin: 12px 15px;
+  height: 60px;
+  background-color: #fafafa;
+  box-shadow: 3px 3px 3px -1px rgba(0, 0, 0, 0.54);
+}
