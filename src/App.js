@@ -39,34 +39,50 @@ const App = () => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="app">
-        <Droppable droppableId={"0"}>
-          {provided => (
-            <div
-              className="left-student-list"
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-            >
-              {provided.placeholder}
-              <form onSubmit={handleSubmit}>
-                <input
-                  type="text"
-                  placeholder="Enter Student Name"
-                  value={student}
-                  onChange={e => setStudent(e.target.value)}
-                />
-                <button>Add Student</button>
-              </form>
-              {renderStudents()}
-              <div className="separator-skew" />
-            </div>
-          )}
-        </Droppable>
+      <div className="page-wrapper">
+        <div className="title-bar">
+          <h1>Team Organizer</h1>
+        </div>
+        <div className="app">
+          <Droppable droppableId={"0"}>
+            {provided => (
+              <div
+                className="left-student-list"
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {provided.placeholder}
+                <form onSubmit={handleSubmit}>
+                  <input
+                    type="text"
+                    placeholder="Enter Student Name"
+                    value={student}
+                    onChange={e => setStudent(e.target.value)}
+                  />
 
-        <div className="teams-wrapper">
-          <TeamList students={students} number={"1"} />
-          <TeamList students={students} number={"2"} />
-          <TeamList students={students} number={"3"} />
+                  <div className="buttons">
+                    <button className="add-student-button">Add Student</button>
+
+                    {/* NEED TO CHANGE WHAT THE BUTTON DOES. RIGHT NOW IT MIMICS THE ADD BUTTON */}
+                    <button className="random-assignment-button">
+                      Randomize
+                    </button>
+                  </div>
+                </form>
+                <div className="unsorted-students">
+                  <div className="unsorted-header-text">Unsorted Students</div>
+                  {renderStudents()}
+                </div>
+                {/* <div className="separator-skew" /> */}
+              </div>
+            )}
+          </Droppable>
+
+          <div className="teams-wrapper">
+            <TeamList students={students} number={"1"} />
+            <TeamList students={students} number={"2"} />
+            <TeamList students={students} number={"3"} />
+          </div>
         </div>
       </div>
     </DragDropContext>
