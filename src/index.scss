@@ -29,25 +29,30 @@ body {
 
     .team-list {
       border: 1px solid black;
-      height: minmax(250px);
+      // height: minmax(250px);
+      width: 250px;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
 
       .team-title {
-        height: 25%;
+        height: 50px;
         width: 100%;
-        padding: 20px 0;
-        margin-bottom: 50px;
+        padding-top: 20px;
+        margin-bottom: 60px;
         text-align: center;
+        font-size: 1.9em;
+        font-weight: 800;
         background-color: #00cb78;
-        transform: skewY(10deg);
+        transform: translate(0px, 30px) skew(0deg, 8deg);
       }
     }
   }
 
   .student-draggable {
     border: 1px solid black;
+    // padding-left: 10px;
+    text-align: center;
     margin: 10px;
     background-color: white;
   }

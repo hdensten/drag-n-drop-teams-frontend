@@ -2,9 +2,8 @@ import React from "react"
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
 
 import StudentDraggable from "./components/StudentDraggable"
-
-import mockData from "./mockData"
 import TeamList from "./components/TeamList"
+import mockData from "./mockData"
 
 const App = () => {
   const [student, setStudent] = React.useState("")
