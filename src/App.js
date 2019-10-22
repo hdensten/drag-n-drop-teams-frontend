@@ -1,10 +1,10 @@
 import React from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import axios from "axios";
 
-import StudentDraggable from "./components/StudentDraggable"
-import TeamList from "./components/TeamList"
-import mockData from "./mockData"
-
+import StudentDraggable from "./components/StudentDraggable";
+import TeamList from "./components/TeamList";
+import mockData from "./mockData";
 
 const App = () => {
   const [student, setStudent] = React.useState("");
@@ -21,11 +21,29 @@ const App = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    setStudents([
-      ...students,
-      { id: students.length + 1, name: student, team: 0 }
-    ]);
+    if (student === "") {
+      return console.log("UNSUCCESSFUL SUBMIT:\nNO NAME\n");
+    }
+    axios
+      .post("http://127.0.0.1:5000/student", {
+        name: student,
+        team: 0
+      })
+      .then(response => {
+        console.log("successful post", response);
+      })
+      .catch(error => {
+        console.log("student post error", error);
+      });
   };
+
+  // const handleSubmit = e => {
+  //   e.preventDefault()
+  //   setStudents([
+  //     ...students,
+  //     { id: students.length + 1, name: student, team: 0 }
+  //   ])
+  // }
 
   const onDragEnd = result => {
     if (!result.destination) {
