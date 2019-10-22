@@ -1,41 +1,60 @@
-import React from "react"
-import { DragDropContext, Droppable } from "react-beautiful-dnd"
+import React from "react";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import axios from "axios";
 
-import StudentDraggable from "./components/StudentDraggable"
-import TeamList from "./components/TeamList"
-import mockData from "./mockData"
+import StudentDraggable from "./components/StudentDraggable";
+import TeamList from "./components/TeamList";
+import mockData from "./mockData";
 
 const App = () => {
-  const [student, setStudent] = React.useState("")
-  const [students, setStudents] = React.useState(mockData)
+  const [student, setStudent] = React.useState("");
+  const [students, setStudents] = React.useState(mockData);
 
   const renderStudents = () => {
-    const noTeam = students.filter(student => student.team === 0)
+    const noTeam = students.filter(student => student.team === 0);
     return noTeam.map((student, index) => {
       return (
         <StudentDraggable key={student.id} student={student} index={index} />
-      )
-    })
-  }
+      );
+    });
+  };
 
   const handleSubmit = e => {
-    e.preventDefault()
-    setStudents([
-      ...students,
-      { id: students.length + 1, name: student, team: 0 }
-    ])
-  }
+    e.preventDefault();
+    if (student === "") {
+      return console.log("UNSUCCESSFUL SUBMIT:\nNO NAME\n");
+    }
+    axios
+      .post("http://127.0.0.1:5000/student", {
+        name: student,
+        team: 0
+      })
+      .then(response => {
+        console.log("successful post", response);
+      })
+      .catch(error => {
+        console.log("student post error", error);
+      });
+  };
+
+  // const handleSubmit = e => {
+  //   e.preventDefault()
+  //   setStudents([
+  //     ...students,
+  //     { id: students.length + 1, name: student, team: 0 }
+  //   ])
+  // }
 
   const onDragEnd = result => {
     if (!result.destination) {
-      return
+      return;
     }
 
     const droppedStudent = students.find(
       student => student.id === result.draggableId
-    )
-    droppedStudent.team = +result.destination.droppableId
-  }
+    );
+    droppedStudent.team = +result.destination.droppableId;
+  };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -86,7 +105,7 @@ const App = () => {
         </div>
       </div>
     </DragDropContext>
-  )
-}
+  );
+};
 
-export default App
+export default App;
