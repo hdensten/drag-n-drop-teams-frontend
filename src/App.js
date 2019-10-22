@@ -1,41 +1,42 @@
-import React from "react"
-import { DragDropContext, Droppable } from "react-beautiful-dnd"
+import React from "react";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 import StudentDraggable from "./components/StudentDraggable"
 import TeamList from "./components/TeamList"
 import mockData from "./mockData"
 
+
 const App = () => {
-  const [student, setStudent] = React.useState("")
-  const [students, setStudents] = React.useState(mockData)
+  const [student, setStudent] = React.useState("");
+  const [students, setStudents] = React.useState(mockData);
 
   const renderStudents = () => {
-    const noTeam = students.filter(student => student.team === 0)
+    const noTeam = students.filter(student => student.team === 0);
     return noTeam.map((student, index) => {
       return (
         <StudentDraggable key={student.id} student={student} index={index} />
-      )
-    })
-  }
+      );
+    });
+  };
 
   const handleSubmit = e => {
-    e.preventDefault()
+    e.preventDefault();
     setStudents([
       ...students,
       { id: students.length + 1, name: student, team: 0 }
-    ])
-  }
+    ]);
+  };
 
   const onDragEnd = result => {
     if (!result.destination) {
-      return
+      return;
     }
 
     const droppedStudent = students.find(
       student => student.id === result.draggableId
-    )
-    droppedStudent.team = +result.destination.droppableId
-  }
+    );
+    droppedStudent.team = +result.destination.droppableId;
+  };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -86,7 +87,7 @@ const App = () => {
         </div>
       </div>
     </DragDropContext>
-  )
-}
+  );
+};
 
-export default App
+export default App;
