@@ -1,0 +1,118 @@
+// * * * * * * * * * *  Left Column (add students/ unsorted)  * * * * * * * * * *
+
+.left-column-droppable-wrapper {
+  display: flex;
+}
+
+.left-student-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: fixed;
+  top: 125px;
+  padding: 40px;
+  height: 100%;
+
+  input {
+    margin-bottom: 20px;
+    width: 150px;
+    height: 30px;
+    font-size: 1em;
+    box-shadow: 3px 3px 6px 0px rgba(0, 0, 0, 0.54);
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  button {
+    align-items: center;
+    text-decoration: none;
+    height: 30px;
+    width: 85px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+
+    &:hover {
+      border: 1px solid black;
+      border-radius: 3px;
+      box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.54);
+    }
+  }
+}
+
+// * * * * * * * * * *  Add Number oF Teams  * * * * * * * * * *
+
+.add-number-of-teams-wrapper {
+  position: fixed;
+  top: 70px;
+  width: 260px;
+  padding: 40px;
+
+  .add-teams-form-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  input {
+    height: 30px;
+    width: 150px;
+    font-size: 1em;
+    box-shadow: 3px 3px 6px 0px rgba(0, 0, 0, 0.54);
+  }
+
+  button {
+    text-decoration: none;
+    height: 30px;
+    width: 85px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+
+    &:hover {
+      border-radius: 3px;
+      border: 1px solid black;
+      box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.54);
+    }
+  }
+}
+
+// * * * * * * * * * *  Add Students  * * * * * * * * * *
+
+.add-students-inputs-and-buttons-wrapper {
+  position: fixed;
+
+  .add-students-form-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 260px;
+  }
+}
+
+.unsorted-students-wrapper {
+  background-color: #ffffff;
+  position: fixed;
+  top: 230px;
+  border: 2px solid #454545;
+  width: 260px;
+  border-radius: 5px;
+  box-shadow: 4px 4px 6px 0px rgba(0, 0, 0, 0.44),
+    inset 0px 0px 100px -30px rgba(255, 216, 158, 0.46);
+
+  .unsorted-header-text {
+    background-color: #bc6d00;
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 10px 0px;
+    font-weight: 800;
+    font-size: 1.2em;
+    box-shadow: 0px 5px 4px 0px rgba(0, 0, 0, 0.54),
+      inset 0px 0px 13px -2px hsla(0, 0, 0, 0.49);
+  }
+  .random-assignment-button {
+    margin-left: 50%;
+  }
+}
