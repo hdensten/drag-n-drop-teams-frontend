@@ -1,19 +1,39 @@
-import React from "react"
+import React, { useEffect } from "react";
+import ReactDOM from "react-dom";
+
+import "./styles.css";
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
 
-import StudentDraggable from "./components/StudentDraggable"
-import TeamList from "./components/TeamList"
+import StudentDraggable from "./StudentDraggable"
+import TeamList from "./TeamList"
 import mockData from "./mockData"
 
 const App = () => {
   const [student, setStudent] = React.useState("")
   const [students, setStudents] = React.useState(mockData)
 
+  //   fetch("https://mar-todo-api.herokuapp.com/todos")
+  //     .then(response => response.json())
+  //     .then(data => setStudents({ students: data }));
+  // }
+
+  useEffect(() => {
+    fetch("https://localhost:/students")
+      .then( res => res.json())
+      .then( data => {setStudents(data)})
+  })
+
+
   const renderStudents = () => {
     const noTeam = students.filter(student => student.team === 0)
     return noTeam.map((student, index) => {
       return (
-        <StudentDraggable key={student.id} student={student} index={index} />
+        <StudentDraggable 
+        key={student.id} 
+        student={student} 
+        index={index}
+        id={student.id}
+         />
       )
     })
   }
@@ -26,10 +46,54 @@ const App = () => {
     ])
   }
 
+  const addStudent = e => {
+    e.preventDefault()
+    fetch("https://localhost:3000/students", {
+      method: "POST",
+      headers: { "content-type": "aplication/json" },
+      body: JSON.stringify({
+        student: student
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      setStudent: "",
+      setStudents: [...student, data]
+    })
+  }
+
+  const deletStudent = id => {
+    fetch(`https://localhost/${id}`, 
+    {method:"DELETE"
+  }).then(
+    setStudents: students.filter(student => student.id !==id)
+  )
+  }
+
   const onDragEnd = result => {
     if (!result.destination) {
       return
     }
+  
+    // const addTodo = event => {
+    //   event.preventDefault();
+    //   fetch("https://mar-todo-api.herokuapp.com/todo", {
+    //     method: "POST",
+    //     headers: { "content-type": "application/json" },
+    //     body: JSON.stringify({
+    //       title: this.state.todo,
+    //       done: false
+    //     })
+    //   })
+    //     .then(response => response.json())
+    //     .then(data =>
+    //       this.setState({
+    //         todos: [...this.state.todos, data],
+    //         todo: ""
+    //       })
+    //     );
+    // };
+  
 
     const droppedStudent = students.find(
       student => student.id === result.draggableId
@@ -39,6 +103,7 @@ const App = () => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
+      
       <div className="page-wrapper">
         <div className="title-bar">
           <h1>Team Organizer</h1>
@@ -89,4 +154,4 @@ const App = () => {
   )
 }
 
-export default App
+ReactDOM.render(<App />, document.getElementById("root"))
