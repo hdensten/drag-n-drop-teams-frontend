@@ -1,68 +1,93 @@
-import React from "react";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import axios from "axios";
+import React from "react"
+import { DragDropContext, Droppable } from "react-beautiful-dnd"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
-import StudentDraggable from "./components/StudentDraggable";
-import TeamList from "./components/TeamList";
-import mockData from "./mockData";
+import TitleBar from "./components/TitleBar"
+import StudentDraggable from "./components/StudentDraggable"
+import TeamList from "./components/TeamList"
+import mockData from "./mockData"
+import Icons from "./helpers/icons"
 
 const App = () => {
-  const [student, setStudent] = React.useState("");
-  const [students, setStudents] = React.useState(mockData);
+  Icons()
+
+  const [student, setStudent] = React.useState("")
+  const [students, setStudents] = React.useState(mockData)
 
   const renderStudents = () => {
-    const noTeam = students.filter(student => student.team === 0);
+    const noTeam = students.filter(student => student.team === 0)
     return noTeam.map((student, index) => {
       return (
         <StudentDraggable key={student.id} student={student} index={index} />
-      );
-    });
-  };
+      )
+    })
+  }
 
   const handleSubmit = e => {
-    e.preventDefault();
-    if (student === "") {
-      return console.log("UNSUCCESSFUL SUBMIT:\nNO NAME\n");
-    }
-    axios
-      .post("http://127.0.0.1:5000/student", {
-        name: student,
-        team: 0
-      })
-      .then(response => {
-        console.log("successful post", response);
-      })
-      .catch(error => {
-        console.log("student post error", error);
-      });
-  };
-
-  // const handleSubmit = e => {
-  //   e.preventDefault()
-  //   setStudents([
-  //     ...students,
-  //     { id: students.length + 1, name: student, team: 0 }
-  //   ])
-  // }
+    e.preventDefault()
+    setStudents([
+      ...students,
+      { id: students.length + 1, name: student, team: 0 }
+    ])
+  }
 
   const onDragEnd = result => {
     if (!result.destination) {
-      return;
+      return
     }
 
     const droppedStudent = students.find(
       student => student.id === result.draggableId
-    );
-    droppedStudent.team = +result.destination.droppableId;
-  };
+    )
+    droppedStudent.team = +result.destination.droppableId
+  }
+
+  document.addEventListener("scroll", () => {
+    document.documentElement.dataset.scroll = window.scrollY
+    console.log("hello")
+  })
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className="page-wrapper">
-        <div className="title-bar">
-          <h1>Team Organizer</h1>
+    <div className="page-wrapper">
+      <TitleBar />
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className="trash-icon-wrapper">
+          <Droppable droppableId={"100"}>
+            {provided => (
+              <div
+                className="trash"
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                <div className="trash-icon">
+                  <FontAwesomeIcon icon="trash" />
+                </div>
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
         </div>
-        <div className="app">
+
+        <div className="add-number-of-teams-wrapper">
+          <form onSubmit={handleSubmit}>
+            <div className="add-teams-form-wrapper">
+              <div className="teams-input">
+                <input
+                  type="text"
+                  placeholder="Number of Teams"
+                  value={student}
+                  onChange={e => setStudent(e.target.value)}
+                />
+              </div>
+
+              <div className="buttons">
+                <button className="add-button">Add Teams</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div className="left-column-droppable-wrapper">
           <Droppable droppableId={"0"}>
             {provided => (
               <div
@@ -71,28 +96,33 @@ const App = () => {
                 {...provided.droppableProps}
               >
                 {provided.placeholder}
-                <form onSubmit={handleSubmit}>
-                  <input
-                    type="text"
-                    placeholder="Enter Student Name"
-                    value={student}
-                    onChange={e => setStudent(e.target.value)}
-                  />
 
-                  <div className="buttons">
-                    <button className="add-student-button">Add Student</button>
+                <div className="add-students-inputs-and-buttons-wrapper">
+                  <form onSubmit={handleSubmit}>
+                    <div className="add-students-form-wrapper">
+                      <div className="students-input">
+                        <input
+                          type="text"
+                          placeholder="Student Name"
+                          value={student}
+                          onChange={e => setStudent(e.target.value)}
+                        />
+                      </div>
 
-                    {/* NEED TO CHANGE WHAT THE BUTTON DOES. RIGHT NOW IT MIMICS THE ADD BUTTON */}
-                    <button className="random-assignment-button">
-                      Randomize
-                    </button>
-                  </div>
-                </form>
-                <div className="unsorted-students">
+                      <div className="buttons">
+                        <button className="add-button">Add Student</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
+                <div className="unsorted-students-wrapper">
                   <div className="unsorted-header-text">Unsorted Students</div>
+                  <button className="random-assignment-button">
+                    Randomize
+                  </button>
                   {renderStudents()}
                 </div>
-                {/* <div className="separator-skew" /> */}
               </div>
             )}
           </Droppable>
@@ -101,11 +131,14 @@ const App = () => {
             <TeamList students={students} number={"1"} />
             <TeamList students={students} number={"2"} />
             <TeamList students={students} number={"3"} />
+            <TeamList students={students} number={"4"} />
+            <TeamList students={students} number={"5"} />
+            <TeamList students={students} number={"6"} />
           </div>
         </div>
-      </div>
-    </DragDropContext>
-  );
-};
+      </DragDropContext>
+    </div>
+  )
+}
 
-export default App;
+export default App
