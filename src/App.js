@@ -10,6 +10,18 @@ const App = () => {
   const [student, setStudent] = React.useState("");
   const [students, setStudents] = React.useState(mockData);
 
+  const getStudents = () => {
+    axios
+      .get("http://127.0.0.1:5000/students")
+      .then(response => {
+        console.log("setStudent response", response);
+        setStudents(response.data);
+      })
+      .catch(error => {
+        console.log("setStudent error", error);
+      });
+  };
+
   const renderStudents = () => {
     const noTeam = students.filter(student => student.team === 0);
     return noTeam.map((student, index) => {
