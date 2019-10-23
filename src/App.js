@@ -1,10 +1,15 @@
-import React from "react"
+import React, { useEffect } from "react";
+import ReactDOM from "react-dom";
+
+import "./styles.css";
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+
 
 import TitleBar from "./components/TitleBar"
 import StudentDraggable from "./components/StudentDraggable"
 import TeamList from "./components/TeamList"
+
 import mockData from "./mockData"
 import Icons from "./helpers/icons"
 
@@ -14,11 +19,28 @@ const App = () => {
   const [student, setStudent] = React.useState("")
   const [students, setStudents] = React.useState(mockData)
 
+  //   fetch("https://mar-todo-api.herokuapp.com/todos")
+  //     .then(response => response.json())
+  //     .then(data => setStudents({ students: data }));
+  // }
+
+  useEffect(() => {
+    fetch("https://localhost:/students")
+      .then( res => res.json())
+      .then( data => {setStudents(data)})
+  })
+
+
   const renderStudents = () => {
     const noTeam = students.filter(student => student.team === 0)
     return noTeam.map((student, index) => {
       return (
-        <StudentDraggable key={student.id} student={student} index={index} />
+        <StudentDraggable 
+        key={student.id} 
+        student={student} 
+        index={index}
+        id={student.id}
+         />
       )
     })
   }
@@ -29,6 +51,30 @@ const App = () => {
       ...students,
       { id: students.length + 1, name: student, team: 0 }
     ])
+  }
+
+  const addStudent = e => {
+    e.preventDefault()
+    fetch("https://localhost:3000/students", {
+      method: "POST",
+      headers: { "content-type": "aplication/json" },
+      body: JSON.stringify({
+        student: student
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      setStudent: "",
+      setStudents: [...student, data]
+    })
+  }
+
+  const deletStudent = id => {
+    fetch(`https://localhost/${id}`, 
+    {method:"DELETE"
+  }).then(
+    setStudents: students.filter(student => student.id !==id)
+  )
   }
 
   const onDragEnd = result => {
@@ -48,6 +94,7 @@ const App = () => {
   })
 
   return (
+
     <div className="page-wrapper">
       <TitleBar />
       <DragDropContext onDragEnd={onDragEnd}>
@@ -141,4 +188,4 @@ const App = () => {
   )
 }
 
-export default App
+ReactDOM.render(<App />, document.getElementById("root"))
