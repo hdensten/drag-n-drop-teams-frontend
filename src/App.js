@@ -1,28 +1,28 @@
-import React, { useEffect } from "react"
-import ReactDOM from "react-dom"
-import axios from "axios"
+import React, { useEffect } from "react";
+import ReactDOM from "react-dom";
+import axios from "axios";
 
-import { DragDropContext, Droppable } from "react-beautiful-dnd"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import TitleBar from "./components/TitleBar"
-import StudentDraggable from "./components/StudentDraggable"
-import TeamList from "./components/TeamList"
+import TitleBar from "./components/TitleBar";
+import StudentDraggable from "./components/StudentDraggable";
+import TeamList from "./components/TeamList";
 
-import mockData from "./mockData"
-import Icons from "./helpers/icons"
-import { existsTypeAnnotation } from "@babel/types"
+import mockData from "./mockData";
+import Icons from "./helpers/icons";
+import { existsTypeAnnotation } from "@babel/types";
 
 const App = () => {
-  Icons()
+  Icons();
 
-  const [student, setStudent] = React.useState("")
-  const [students, setStudents] = React.useState([])
-  const [teamsEntry, setTeamsEntry] = React.useState("")
-  const [teamsArray, setTeamsArray] = React.useState([])
+  const [student, setStudent] = React.useState("");
+  const [students, setStudents] = React.useState([]);
+  const [teamsEntry, setTeamsEntry] = React.useState("");
+  const [teamsArray, setTeamsArray] = React.useState([1, 2, 3]);
 
   const renderStudents = () => {
-    const noTeam = students.filter(student => student.team === 0)
+    const noTeam = students.filter(student => student.team === 0);
     return noTeam.map((student, index) => {
       return (
         <StudentDraggable
@@ -32,9 +32,9 @@ const App = () => {
           deleteStudent={deleteStudent}
           // id={student.id}
         />
-      )
-    })
-  }
+      );
+    });
+  };
 
   //   fetch("https://mar-todo-api.herokuapp.com/todos")
   //     .then(response => response.json())
@@ -50,88 +50,56 @@ const App = () => {
   // });
 
   const handleSubmit = e => {
-    e.preventDefault()
+    e.preventDefault();
     if (student === "") {
-      return console.log("UNSUCCESSFUL SUBMIT:\nNO NAME\n")
+      return console.log("UNSUCCESSFUL SUBMIT:\nNO NAME\n");
     }
     axios
-      .post("https://dragn-drop-teams.herokuapp.com/student", {
+      .post("http://127.0.0.1:5000/student", {
         name: student,
         team: 0
       })
       .then(response => {
-        console.log("successful post", response)
-        setStudents([...students, response.data])
-        setStudent("")
+        console.log("successful post", response);
+        setStudents([...students, response.data]);
+        setStudent("");
       })
       .catch(error => {
-        console.log("student post error", error)
-      })
-  }
+        console.log("student post error", error);
+      });
+  };
 
   const getStudents = () => {
     axios
-      .get("https://dragn-drop-teams.herokuapp.com/students")
+      .get("http://127.0.0.1:5000/students")
       .then(response => {
-        console.log("setStudent response", response.data)
-        setStudents(response.data)
+        console.log("setStudent response", response.data);
+        setStudents(response.data);
       })
       .catch(error => {
-        console.log("setStudent error", error)
-      })
-  }
+        console.log("setStudent error", error);
+      });
+  };
 
   useEffect(() => {
-    getStudents()
-  }, [])
+    getStudents();
+  }, []);
 
   // FUNCTION TO PREVENT AUTO-SORTING LISTS WHEN STUDENT IS DROPPED IN A TEAM
   const reorder = (list, startIndex, endIndex) => {
-    const result = Array.from(list)
-    const [removed] = result.splice(startIndex, 1)
-    result.splice(endIndex, 0, removed)
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
 
-    return result
-  }
-
-  // const handleSubmit = e => {
-  //   e.preventDefault();
-  //   setStudents([
-  //     ...students,
-  //     { id: students.length + 1, name: student, team: 0 }
-  //   ]);
-  // };
-
-  // const addStudent = e => {
-  //   e.preventDefault()
-  //   fetch("https://localhost:3000/students", {
-  //     method: "POST",
-  //     headers: { "content-type": "aplication/json" },
-  //     body: JSON.stringify({
-  //       student: student
-  //     })
-  //   })
-  //   .then(res => res.json())
-  //   .then(data => {
-  //     setStudent: "",
-  //     setStudents: [...student, data]
-  //   })
-  // }
-
-  // const deletStudent = id => {
-  //   fetch(`https://localhost/${id}`,
-  //   {method:"DELETE"
-  // }).then(
-  //   setStudents: students.filter(student => student.id !==id)
-  // )
-  // }
+    return result;
+  };
 
   const deleteStudent = id => {
     axios
-      .delete(`https://dragn-drop-teams.herokuapp.com/student/${id}`)
+      .delete(`http://127.0.0.1:5000/student/${id}`)
       .then(response => {
-        console.log("student deleted", response)
-        setStudents(students.filter(student => student.id !== id))
+        console.log("student deleted", response);
+        setStudents(students.filter(student => student.id !== id));
       })
       .catch(error => {
         console.log("error deleting student", error);
@@ -151,14 +119,14 @@ const App = () => {
   };
 
   const setNumberOfTeams = e => {
-    e.preventDefault()
-    let numberOfTeamsArray = []
+    e.preventDefault();
+    let numberOfTeamsArray = [];
     for (let i = teamsEntry; i > 0; i--) {
-      numberOfTeamsArray.unshift(i)
+      numberOfTeamsArray.unshift(i);
     }
-    setTeamsArray(numberOfTeamsArray)
-    renderTeams()
-  }
+    setTeamsArray(numberOfTeamsArray);
+    renderTeams();
+  };
 
   const renderTeams = () => {
     return teamsArray.map((team, idx) => {
@@ -177,27 +145,19 @@ const App = () => {
 
   const onDragEnd = result => {
     if (!result.destination) {
-      return
+      return;
     }
 
     // CALLING REORDER FUNCTION -- NOT WORKING
-    // const students = reorder(
-    //   students,
-    //   result.source.index,
-    //   result.destination.index
-    // );
+    reorder(students, result.source.index, result.destination.index);
 
     const droppedStudent = students.find(
       student => student.id === result.draggableId
     );
 
     updateStudent(droppedStudent.id, result.destination.droppableId);
-
-    console.log(droppedStudent.id, result.destination.droppableId);
-
-    // droppedStudent.team = +result.destination.droppableId;
+    droppedStudent.team = +result.destination.droppableId;
   };
-
 
   // * * * * * *  Activates top title bar  * * * * * *
   React.useEffect(() => {
@@ -205,8 +165,8 @@ const App = () => {
   });
 
   document.addEventListener("scroll", () => {
-    document.documentElement.dataset.scroll = window.scrollY
-  })
+    document.documentElement.dataset.scroll = window.scrollY;
+  });
 
   // * * * * * *  Scroll to top on refresh  * * * * * *
   window.onbeforeunload = function() {
@@ -292,10 +252,10 @@ const App = () => {
         </div>
       </DragDropContext>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
 
 // Database link: "https://dragn-drop-teams.herokuapp.com"
 
