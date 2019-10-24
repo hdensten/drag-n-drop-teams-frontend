@@ -1,15 +1,10 @@
-import React, { useEffect } from "react";
-import ReactDOM from "react-dom";
-
-import "./styles.css";
+import React from "react"
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-
 
 import TitleBar from "./components/TitleBar"
 import StudentDraggable from "./components/StudentDraggable"
 import TeamList from "./components/TeamList"
-
 import mockData from "./mockData"
 import Icons from "./helpers/icons"
 
@@ -19,40 +14,11 @@ const App = () => {
   const [student, setStudent] = React.useState("")
   const [students, setStudents] = React.useState(mockData)
 
-  //   fetch("https://mar-todo-api.herokuapp.com/todos")
-  //     .then(response => response.json())
-  //     .then(data => setStudents({ students: data }));
-  // }
-
-  useEffect(() => {
-    fetch("https://localhost:/students")
-      .then( res => res.json())
-      .then( data => {setStudents(data)})
-  })
-
-
-  const getStudents = () => {
-    axios
-      .get("http://127.0.0.1:5000/students")
-      .then(response => {
-        console.log("setStudent response", response);
-        setStudents(response.data);
-      })
-      .catch(error => {
-        console.log("setStudent error", error);
-      });
-  };
-
   const renderStudents = () => {
     const noTeam = students.filter(student => student.team === 0)
     return noTeam.map((student, index) => {
       return (
-        <StudentDraggable 
-        key={student.id} 
-        student={student} 
-        index={index}
-        id={student.id}
-         />
+        <StudentDraggable key={student.id} student={student} index={index} />
       )
     })
   }
@@ -63,30 +29,6 @@ const App = () => {
       ...students,
       { id: students.length + 1, name: student, team: 0 }
     ])
-  }
-
-  const addStudent = e => {
-    e.preventDefault()
-    fetch("https://localhost:3000/students", {
-      method: "POST",
-      headers: { "content-type": "aplication/json" },
-      body: JSON.stringify({
-        student: student
-      })
-    })
-    .then(res => res.json())
-    .then(data => {
-      setStudent: "",
-      setStudents: [...student, data]
-    })
-  }
-
-  const deletStudent = id => {
-    fetch(`https://localhost/${id}`, 
-    {method:"DELETE"
-  }).then(
-    setStudents: students.filter(student => student.id !==id)
-  )
   }
 
   const onDragEnd = result => {
@@ -100,33 +42,25 @@ const App = () => {
     droppedStudent.team = +result.destination.droppableId
   }
 
+  // * * * * * *  Activates top title bar  * * * * * *
+  React.useEffect(() => {
+    window.scrollTo(0, 1)
+  })
+
   document.addEventListener("scroll", () => {
     document.documentElement.dataset.scroll = window.scrollY
     console.log("hello")
   })
 
-  return (
+  // * * * * * *  Scroll to top on refresh  * * * * * *
+  window.onbeforeunload = function() {
+    window.scrollTo(0, 0)
+  }
 
+  return (
     <div className="page-wrapper">
       <TitleBar />
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="trash-icon-wrapper">
-          <Droppable droppableId={"100"}>
-            {provided => (
-              <div
-                className="trash"
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-              >
-                <div className="trash-icon">
-                  <FontAwesomeIcon icon="trash" />
-                </div>
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </div>
-
         <div className="add-number-of-teams-wrapper">
           <form onSubmit={handleSubmit}>
             <div className="add-teams-form-wrapper">
@@ -140,7 +74,7 @@ const App = () => {
               </div>
 
               <div className="buttons">
-                <button className="add-button">Add Teams</button>
+                <button className="add-team-button">Add Teams</button>
               </div>
             </div>
           </form>
@@ -169,7 +103,9 @@ const App = () => {
                       </div>
 
                       <div className="buttons">
-                        <button className="add-button">Add Student</button>
+                        <button className="add-student-button">
+                          Add Student
+                        </button>
                       </div>
                     </div>
                   </form>
@@ -177,10 +113,12 @@ const App = () => {
 
                 <div className="unsorted-students-wrapper">
                   <div className="unsorted-header-text">Unsorted Students</div>
-                  <button className="random-assignment-button">
-                    Randomize
-                  </button>
-                  {renderStudents()}
+                  <div className="buttons">
+                    <button className="randomize-button">Randomize</button>
+                  </div>
+                  <div className="render-unsorted-students">
+                    {renderStudents()}
+                  </div>
                 </div>
               </div>
             )}
@@ -200,4 +138,4 @@ const App = () => {
   )
 }
 
-ReactDOM.render(<App />, document.getElementById("root"))
+export default App
