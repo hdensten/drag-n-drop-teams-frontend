@@ -20,7 +20,7 @@ const StudentDraggable = props => {
             </div>
             <div className="trash-icon-wrapper">
               <div className="trash-icon">
-                <a onClick={() => props.delete(props.student.id)}>
+                <a onClick={() => props.deleteStudent(props.student.id)}>
                   <FontAwesomeIcon icon="trash" />
                 </a>
               </div>

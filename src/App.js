@@ -27,7 +27,7 @@ const App = () => {
           key={student.id}
           student={student}
           index={index}
-          delete={deleteStudent}
+          deleteStudent={deleteStudent}
           // id={student.id}
         />
       );
@@ -123,7 +123,7 @@ const App = () => {
   //   setStudents: students.filter(student => student.id !==id)
   // )
   // }
-  const deleteStudent = id =>
+  const deleteStudent = id => {
     axios
       .delete(`http://127.0.0.1:5000/student/${id}`)
       .then(response => {
@@ -133,11 +133,33 @@ const App = () => {
       .catch(error => {
         console.log("error deleting student", error);
       });
+  };
+
+  const updateStudent = (id, newTeam) => {
+    axios
+      .put(`http://127.0.0.1:5000/student/${id}`, { team: newTeam })
+      .then(response => {
+        console.log(response);
+        setStudents([...students, response.data]);
+      })
+      .catch(error => {
+        console.log("update student error", error);
+      });
+  };
 
   const renderTeams = () => {
     const teamNums = [1, 2, 3];
     return teamNums.map((team, idx) => {
-      return <TeamList key={idx} students={students} number={team} />;
+      return (
+        <TeamList
+          key={idx}
+          id={student.id}
+          students={students}
+          deleteStudent={deleteStudent}
+          number={team}
+          setStudents={setStudents}
+        />
+      );
     });
   };
 
@@ -156,13 +178,18 @@ const App = () => {
     const droppedStudent = students.find(
       student => student.id === result.draggableId
     );
-    droppedStudent.team = +result.destination.droppableId;
+
+    updateStudent(droppedStudent.id, result.destination.droppableId);
+
+    console.log(droppedStudent.id, result.destination.droppableId);
+
+    // droppedStudent.team = +result.destination.droppableId;
   };
 
   // * * * * * *  Activates top title bar  * * * * * *
   React.useEffect(() => {
-    window.scrollTo(0, 1)
-  })
+    window.scrollTo(0, 1);
+  });
 
   document.addEventListener("scroll", () => {
     document.documentElement.dataset.scroll = window.scrollY;
@@ -170,8 +197,8 @@ const App = () => {
 
   // * * * * * *  Scroll to top on refresh  * * * * * *
   window.onbeforeunload = function() {
-    window.scrollTo(0, 0)
-  }
+    window.scrollTo(0, 0);
+  };
 
   return (
     <div className="page-wrapper">
