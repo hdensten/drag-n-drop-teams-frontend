@@ -1,10 +1,10 @@
-import React from "react";
-import { Droppable } from "react-beautiful-dnd";
+import React from "react"
+import { Droppable } from "react-beautiful-dnd"
 
-import StudentDraggable from "./StudentDraggable";
+import StudentDraggable from "./StudentDraggable"
 
 const TeamList = props => {
-  const [students] = React.useState(props.students);
+  const [students] = React.useState(props.students)
 
   const renderStudents = () => {
     const teamPride = students.filter(
@@ -41,7 +41,7 @@ const TeamList = props => {
         </div>
       )}
     </Droppable>
-  );
-};
+  )
+}
 
-export default TeamList;
+export default TeamList
