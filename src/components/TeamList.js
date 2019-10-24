@@ -7,13 +7,25 @@ const TeamList = props => {
   const [students] = React.useState(props.students)
 
   const renderStudents = () => {
-    const teamPride = students.filter(student => student.team === +props.number)
+    const teamPride = students.filter(
+      student => student.team === +props.number
+    );
+
+    props.setStudents(
+      props.students.filter(student => student.id !== props.id)
+    );
+
     return teamPride.map((student, index) => {
       return (
-        <StudentDraggable key={student.id} student={student} index={index} />
-      )
-    })
-  }
+        <StudentDraggable
+          key={student.id}
+          student={student}
+          deleteStudent={props.deleteStudent}
+          index={index}
+        />
+      );
+    });
+  };
 
   return (
     <Droppable droppableId={props.number}>
