@@ -1,5 +1,6 @@
 @import "./index.scss";
-@import "./left-column";
-@import "./student-card.scss";
-@import "./teams-column.scss";
+@import "./mixins.scss";
 @import "./title-bar.scss";
+@import "./left-column.scss";
+@import "./teams-column.scss";
+@import "./student-card.scss";

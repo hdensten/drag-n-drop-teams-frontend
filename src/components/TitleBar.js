@@ -4,7 +4,7 @@ const TitleBar = () => {
   return (
     <div className="title-bar">
       <header>
-        <h1>Team Organizer</h1>
+        <h1>Team Generator</h1>
       </header>
     </div>
   )

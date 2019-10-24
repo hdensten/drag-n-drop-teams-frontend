@@ -159,31 +159,24 @@ const App = () => {
     droppedStudent.team = +result.destination.droppableId;
   };
 
+  // * * * * * *  Activates top title bar  * * * * * *
+  React.useEffect(() => {
+    window.scrollTo(0, 1)
+  })
+
   document.addEventListener("scroll", () => {
     document.documentElement.dataset.scroll = window.scrollY;
   });
+
+  // * * * * * *  Scroll to top on refresh  * * * * * *
+  window.onbeforeunload = function() {
+    window.scrollTo(0, 0)
+  }
 
   return (
     <div className="page-wrapper">
       <TitleBar />
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="trash-icon-wrapper">
-          <Droppable droppableId={"100"}>
-            {provided => (
-              <div
-                className="trash"
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-              >
-                <div className="trash-icon">
-                  <FontAwesomeIcon icon="trash" />
-                </div>
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </div>
-
         <div className="add-number-of-teams-wrapper">
           <form onSubmit={handleSubmit}>
             <div className="add-teams-form-wrapper">
@@ -197,7 +190,7 @@ const App = () => {
               </div>
 
               <div className="buttons">
-                <button className="add-button">Add Teams</button>
+                <button className="add-team-button">Add Teams</button>
               </div>
             </div>
           </form>
@@ -226,7 +219,9 @@ const App = () => {
                       </div>
 
                       <div className="buttons">
-                        <button className="add-button">Add Student</button>
+                        <button className="add-student-button">
+                          Add Student
+                        </button>
                       </div>
                     </div>
                   </form>
@@ -234,16 +229,12 @@ const App = () => {
 
                 <div className="unsorted-students-wrapper">
                   <div className="unsorted-header-text">Unsorted Students</div>
-                  <button className="random-assignment-button">
-                    Randomize
-                  </button>
-                  {/* <button
-                    className="random-assignment-button"
-                    onClick={getStudents}
-                  >
-                    Generate Students
-                  </button> */}
-                  {renderStudents()}
+                  <div className="buttons">
+                    <button className="randomize-button">Randomize</button>
+                  </div>
+                  <div className="render-unsorted-students">
+                    {renderStudents()}
+                  </div>
                 </div>
               </div>
             )}
