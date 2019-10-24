@@ -14,6 +14,7 @@ const TeamList = props => {
     props.setStudents(
       props.students.filter(student => student.id !== props.id)
     );
+
     return teamPride.map((student, index) => {
       return (
         <StudentDraggable
