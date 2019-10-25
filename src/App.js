@@ -18,8 +18,9 @@ const App = () => {
 
   const [student, setStudent] = React.useState("");
   const [students, setStudents] = React.useState([]);
-  const [teamsEntry, setTeamsEntry] = React.useState("");
-  const [teamsArray, setTeamsArray] = React.useState([1, 2, 3]);
+  const [reRender, setReRender] = React.useState(false);
+  const [teamsEntry, setTeamsEntry] = React.useState(""); // CHANGES HERE!!!!!!!
+  const [teamsArray, setTeamsArray] = React.useState([1, 2, 3]); // CHANGES HERE!!!!!!!
 
   const renderStudents = () => {
     const noTeam = students.filter(student => student.team === 0);
@@ -83,7 +84,7 @@ const App = () => {
 
   useEffect(() => {
     getStudents();
-  }, []);
+  }, [reRender]);
 
   // FUNCTION TO PREVENT AUTO-SORTING LISTS WHEN STUDENT IS DROPPED IN A TEAM
   const reorder = (list, startIndex, endIndex) => {
@@ -100,6 +101,7 @@ const App = () => {
       .then(response => {
         console.log("student deleted", response);
         setStudents(students.filter(student => student.id !== id));
+        // window.location.reload(true);
       })
       .catch(error => {
         console.log("error deleting student", error);
@@ -129,6 +131,7 @@ const App = () => {
   };
 
   const renderTeams = () => {
+    // CHANGES HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     return teamsArray.map((team, idx) => {
       return (
         <TeamList
@@ -148,15 +151,45 @@ const App = () => {
       return;
     }
 
+    // const { destination, source, draggableId } = result;
+    // if (!result.destination) {
+    //   return;
+    // }
+    // if (
+    //   destination.droppableId === source.droppableId &&
+    //   destination.index === source.index
+    // ) {
+    //   return;
+    // }
+    // const students = setStudents[source.droppableId];
+    // const newStudentIds = Array.from(students.id);
+    // newStudentIds.splice(source.index, 1);
+    // newStudentIds.splice(destination.index, 0, draggableId);
+
     // CALLING REORDER FUNCTION -- NOT WORKING
-    reorder(students, result.source.index, result.destination.index);
+    // reorder(students, result.source.index, result.destination.index);
+
+    // const newStudent = {
+    //   ...students,
+    //   [student.id]: newStudentIds
+    // }
+    // const newSate = {
+    //   ...setStudents: {
+    //     ...this.state.students,
+    //     [newStudent.id]: newStudent
+    //   }
+    //   }
 
     const droppedStudent = students.find(
       student => student.id === result.draggableId
     );
 
     updateStudent(droppedStudent.id, result.destination.droppableId);
+
     droppedStudent.team = +result.destination.droppableId;
+
+    setReRender(!reRender);
+    // getStudents();
   };
 
   // * * * * * *  Activates top title bar  * * * * * *
