@@ -1,15 +1,14 @@
-import React from "react";
-import { Droppable } from "react-beautiful-dnd";
+import React from "react"
+import { Droppable } from "react-beautiful-dnd"
+// import App from "../App"
 
-import StudentDraggable from "./StudentDraggable";
+import StudentDraggable from "./StudentDraggable"
 
 const TeamList = props => {
-  const [students] = React.useState(props.students);
+  const [students] = React.useState(props.students)
 
   const renderStudents = () => {
-    const teamPride = students.filter(
-      student => student.team === +props.number
-    );
+    const teamPride = students.filter(student => student.team === props.number)
 
     return teamPride.map((student, index) => {
       return (
@@ -19,9 +18,9 @@ const TeamList = props => {
           deleteStudent={props.deleteStudent}
           index={index}
         />
-      );
-    });
-  };
+      )
+    })
+  }
 
   return (
     <Droppable droppableId={props.number}>
@@ -37,7 +36,7 @@ const TeamList = props => {
         </div>
       )}
     </Droppable>
-  );
-};
+  )
+}
 
-export default TeamList;
+export default TeamList

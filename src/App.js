@@ -1,28 +1,29 @@
-import React, { useEffect } from "react";
-import ReactDOM from "react-dom";
-import axios from "axios";
+import React, { useEffect } from "react"
+import ReactDOM from "react-dom"
+import axios from "axios"
 
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { DragDropContext, Droppable } from "react-beautiful-dnd"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
-import TitleBar from "./components/TitleBar";
-import StudentDraggable from "./components/StudentDraggable";
-import TeamList from "./components/TeamList";
+import TitleBar from "./components/TitleBar"
+import StudentDraggable from "./components/StudentDraggable"
+import TeamList from "./components/TeamList"
 
-import mockData from "./mockData";
-import Icons from "./helpers/icons";
-import { existsTypeAnnotation } from "@babel/types";
+import mockData from "./mockData"
+import Icons from "./helpers/icons"
+import { existsTypeAnnotation } from "@babel/types"
 
 const App = () => {
-  Icons();
+  Icons()
 
-  const [student, setStudent] = React.useState("");
-  const [students, setStudents] = React.useState([]);
-  const [teamsEntry, setTeamsEntry] = React.useState("");
-  const [teamsArray, setTeamsArray] = React.useState([1, 2, 3]);
+  const [student, setStudent] = React.useState("")
+  const [students, setStudents] = React.useState([])
+  const [teamsEntry, setTeamsEntry] = React.useState(4)
+  const [teamsArray, setTeamsArray] = React.useState([1, 2, 3, 4])
+  // const [stateReloader, setStateReloader] = React.useState(true)
 
   const renderStudents = () => {
-    const noTeam = students.filter(student => student.team === 0);
+    const noTeam = students.filter(student => student.team === 0)
     return noTeam.map((student, index) => {
       return (
         <StudentDraggable
@@ -32,9 +33,9 @@ const App = () => {
           deleteStudent={deleteStudent}
           // id={student.id}
         />
-      );
-    });
-  };
+      )
+    })
+  }
 
   //   fetch("https://mar-todo-api.herokuapp.com/todos")
   //     .then(response => response.json())
@@ -50,83 +51,90 @@ const App = () => {
   // });
 
   const handleSubmit = e => {
-    e.preventDefault();
+    e.preventDefault()
     if (student === "") {
-      return console.log("UNSUCCESSFUL SUBMIT:\nNO NAME\n");
+      return console.log("UNSUCCESSFUL SUBMIT:\nNO NAME\n")
     }
     axios
-      .post("http://127.0.0.1:5000/student", {
+      .post("https://dragn-drop-teams.herokuapp.com/student", {
         name: student,
         team: 0
       })
       .then(response => {
-        console.log("successful post", response);
-        setStudents([...students, response.data]);
-        setStudent("");
+        console.log("successful post", response)
+        setStudents([...students, response.data])
+        setStudent("")
       })
       .catch(error => {
-        console.log("student post error", error);
-      });
-  };
+        console.log("student post error", error)
+      })
+  }
 
   const getStudents = () => {
     axios
-      .get("http://127.0.0.1:5000/students")
+      .get("https://dragn-drop-teams.herokuapp.com/students")
       .then(response => {
-        console.log("setStudent response", response.data);
-        setStudents(response.data);
+        console.log("setStudent response", response.data)
+        setStudents(response.data)
       })
       .catch(error => {
-        console.log("setStudent error", error);
-      });
-  };
+        console.log("setStudent error", error)
+      })
+  }
 
   useEffect(() => {
-    getStudents();
-  }, []);
+    getStudents()
+  }, [])
 
   // FUNCTION TO PREVENT AUTO-SORTING LISTS WHEN STUDENT IS DROPPED IN A TEAM
-  const reorder = (list, startIndex, endIndex) => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
+  // const reorder = (list, startIndex, endIndex) => {
+  //   const result = Array.from(list)
+  //   const [removed] = result.splice(startIndex, 1)
+  //   result.splice(endIndex, 0, removed)
 
-    return result;
-  };
+  //   return result
+  // }
 
+  // console.log(stateReloader)
   const deleteStudent = id => {
     axios
-      .delete(`http://127.0.0.1:5000/student/${id}`)
+      .delete(`https://dragn-drop-teams.herokuapp.com/student/${id}`)
       .then(response => {
-        console.log("student deleted", response);
-        setStudents(students.filter(student => student.id !== id));
+        console.log("student deleted", response)
+        setStudents(students.filter(student => student.id !== id))
+        setTimeout(() => {
+          window.location.reload(true)
+        }, 500)
       })
       .catch(error => {
-        console.log("error deleting student", error);
-      });
-  };
+        console.log("error deleting student", error)
+      })
+  }
 
   const updateStudent = (id, newTeam) => {
     axios
-      .put(`http://127.0.0.1:5000/student/${id}`, { team: newTeam })
+      .put(`https://dragn-drop-teams.herokuapp.com/student/${id}`, {
+        team: newTeam
+      })
       .then(response => {
-        console.log(response);
-        setStudents([...students, response.data]);
+        console.log(response)
+        setStudents([...students, response.data])
+        // window.location.reload(true)
       })
       .catch(error => {
-        console.log("update student error", error);
-      });
-  };
+        console.log("update student error", error)
+      })
+  }
 
   const setNumberOfTeams = e => {
-    e.preventDefault();
-    let numberOfTeamsArray = [];
+    e.preventDefault()
+    let numberOfTeamsArray = []
     for (let i = teamsEntry; i > 0; i--) {
-      numberOfTeamsArray.unshift(i);
+      numberOfTeamsArray.unshift(i)
     }
-    setTeamsArray(numberOfTeamsArray);
-    renderTeams();
-  };
+    setTeamsArray(numberOfTeamsArray)
+    // renderTeams()
+  }
 
   const renderTeams = () => {
     return teamsArray.map((team, idx) => {
@@ -139,45 +147,81 @@ const App = () => {
           number={team}
           setStudents={setStudents}
         />
-      );
-    });
-  };
+      )
+    })
+  }
+
+  //  * * * * * * * * * * * *  Randomize Teams  * * * * * * * * * * * * * *
+  const randomize = () => {
+    let i = 1
+    let teamNumArray = []
+    for (let num = 0; num < students.length; num++) {
+      teamNumArray.push(i)
+      i++
+      if (i === teamsEntry + 1) {
+        i = 1
+      }
+    }
+
+    let j = 0
+    for (let num = 0; num < students.length; num++) {
+      let teamNum = teamNumArray.splice(
+        [Math.floor(Math.random() * (teamsEntry - j))],
+        1
+      )
+      updateStudent(students[num].id, teamNum[0])
+      // updateStudent(students[num].id, 0)
+      j++
+    }
+    timer()
+  }
+
+  //  * * * * * * * * * * * *  Clear Teams  * * * * * * * * * * * * * *
+  const clearTeams = props => {
+    for (let num = 0; num < students.length; num++) {
+      updateStudent(students[num].id, 0)
+    }
+    timer()
+  }
+
+  const timer = () => {
+    setTimeout(() => {
+      window.location.reload(true)
+      // this.forceUpdate()
+    }, 1000)
+  }
 
   const onDragEnd = result => {
     if (!result.destination) {
-      return;
+      return
     }
 
     // CALLING REORDER FUNCTION -- NOT WORKING
-    reorder(students, result.source.index, result.destination.index);
+    // reorder(students, result.source.index, result.destination.index)
 
     const droppedStudent = students.find(
       student => student.id === result.draggableId
-    );
+    )
 
-    updateStudent(droppedStudent.id, result.destination.droppableId);
-    droppedStudent.team = +result.destination.droppableId;
-  };
+    updateStudent(droppedStudent.id, result.destination.droppableId)
+    droppedStudent.team = result.destination.droppableId
+  }
 
   // * * * * * *  Activates top title bar  * * * * * *
   React.useEffect(() => {
-    window.scrollTo(0, 1);
-  });
+    window.scrollTo(0, 1)
+    window.scrollTo(0, 0)
+  })
 
   document.addEventListener("scroll", () => {
-    document.documentElement.dataset.scroll = window.scrollY;
-  });
-
-  // * * * * * *  Scroll to top on refresh  * * * * * *
-  window.onbeforeunload = function() {
-    window.scrollTo(0, 0);
-  };
+    document.documentElement.dataset.scroll = window.scrollY
+  })
 
   return (
     <div className="page-wrapper">
       <TitleBar />
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="add-number-of-teams-wrapper">
+        {/* <div className="add-number-of-teams-wrapper">
           <form onSubmit={setNumberOfTeams}>
             <div className="add-teams-form-wrapper">
               <div className="teams-input">
@@ -194,6 +238,25 @@ const App = () => {
               </div>
             </div>
           </form>
+        </div> */}
+
+        <div className="add-students-inputs-and-buttons-wrapper">
+          <form onSubmit={handleSubmit}>
+            <div className="add-students-form-wrapper">
+              <div className="students-input">
+                <input
+                  type="text"
+                  placeholder="Student Name"
+                  value={student}
+                  onChange={e => setStudent(e.target.value)}
+                />
+              </div>
+
+              <div className="buttons">
+                <button className="add-student-button">Add Student</button>
+              </div>
+            </div>
+          </form>
         </div>
 
         <div className="left-column-droppable-wrapper">
@@ -206,31 +269,15 @@ const App = () => {
               >
                 {provided.placeholder}
 
-                <div className="add-students-inputs-and-buttons-wrapper">
-                  <form onSubmit={handleSubmit}>
-                    <div className="add-students-form-wrapper">
-                      <div className="students-input">
-                        <input
-                          type="text"
-                          placeholder="Student Name"
-                          value={student}
-                          onChange={e => setStudent(e.target.value)}
-                        />
-                      </div>
-
-                      <div className="buttons">
-                        <button className="add-student-button">
-                          Add Student
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-
                 <div className="unsorted-students-wrapper">
                   <div className="unsorted-header-text">Unsorted Students</div>
                   <div className="buttons">
-                    <button className="randomize-button">Randomize</button>
+                    <button className="randomize-button" onClick={randomize}>
+                      Randomize
+                    </button>
+                    <button className="randomize-button" onClick={clearTeams}>
+                      Clear Teams
+                    </button>
                   </div>
                   <div className="render-unsorted-students">
                     {renderStudents()}
@@ -252,10 +299,10 @@ const App = () => {
         </div>
       </DragDropContext>
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
 
 // Database link: "https://dragn-drop-teams.herokuapp.com"
 
